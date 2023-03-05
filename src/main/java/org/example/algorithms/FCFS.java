@@ -8,7 +8,7 @@ import java.util.Comparator;
 public class FCFS {
     private double avgWaitingTime;
     private double avgTurnaroundTime;
-    private ArrayList<GanttChartSection> ganttChartSections = new ArrayList<>();
+    private final ArrayList<GanttChartSection> ganttChartSections = new ArrayList<>();
     public FCFS(ArrayList<Process> processes) {
         if(processes.size() > 0) {
             processes.sort(Comparator.comparingInt(Process::getArrivalTime));

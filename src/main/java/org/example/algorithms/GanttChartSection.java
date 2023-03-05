@@ -1,9 +1,9 @@
 package org.example.algorithms;
 
 public class GanttChartSection {
-    private int beginTime;
+    private final int beginTime;
     private int endTime;
-    private String pName;
+    private final String pName;
 
     public GanttChartSection(int beginTime, int endTime, String pName) {
         this.beginTime = beginTime;

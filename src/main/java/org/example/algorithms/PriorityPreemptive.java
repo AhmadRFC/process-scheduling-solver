@@ -7,8 +7,8 @@ import java.util.LinkedList;
 
 public class PriorityPreemptive {
 
-    private LinkedList<Process> Processes;
-    private ArrayList<GanttChartSection> ganttChartData;
+    private final LinkedList<Process> Processes;
+    private final ArrayList<GanttChartSection> ganttChartData;
 
     public PriorityPreemptive(LinkedList<Process> Processes) {
         this.Processes = Processes;
@@ -22,8 +22,8 @@ public class PriorityPreemptive {
         Process pro = null;
         GanttChartSection last = null;
         LinkedList<Process> readyP = new LinkedList<>();
-        for (int i = 0; i < this.Processes.size(); i++) {
-            readyP.add(new Process(this.Processes.get(i)));
+        for (Process process : this.Processes) {
+            readyP.add(new Process(process));
         }
         while (!readyP.isEmpty()) {
 
@@ -31,30 +31,25 @@ public class PriorityPreemptive {
                 pro = readyP.get(0);
             }
 
-            for (int i = 0; i < readyP.size(); i++) {
-                if (readyP.get(i).getArrivalTime() <= counter) {
-                    pro = readyP.get(i);
+            for (Process process : readyP) {
+                if (process.getArrivalTime() <= counter) {
+                    pro = process;
                     break;
                 }
             }
-            for (int i = 0; i < readyP.size(); i++) {
-                if (readyP.get(i).getArrivalTime() <= counter) {
-                    if (readyP.get(i).getPriority() < pro.getPriority()) {
-                        pro = readyP.get(i);
-                    } else if (readyP.get(i).getPriority() == pro.getPriority()
-                            && readyP.get(i).getArrivalTime() < pro.getArrivalTime()) {
-                        pro = readyP.get(i);
+            for (Process process : readyP) {
+                if (process.getArrivalTime() <= counter) {
+                    if (pro != null && process.getPriority() < pro.getPriority()) {
+                        pro = process;
                     }
                 }
             }
 
             if (pro != null) {
                 if (!pro.isStarted()) {
-                    for (int i = 0; i < this.Processes.size(); i++) {
-                        if (this.Processes.get(i).getPName().matches(pro.getPName())) {
-                            this.Processes.get(i)
-                                    .setResponseTime(
-                                            counter - this.Processes.get(i).getArrivalTime());
+                    for (Process process : this.Processes) {
+                        if (process.getPName().matches(pro.getPName())) {
+                            process.setResponseTime(counter - process.getArrivalTime());
                             pro.setStarted(true);
                         }
                     }
@@ -77,15 +72,12 @@ public class PriorityPreemptive {
                 pro.setBurstTime(pro.getBurstTime() - 1);
                 counter++;
                 if (pro.getBurstTime() == 0) {
-                    for (int i = 0; i < this.Processes.size(); i++) {
-                        if (this.Processes.get(i).getPName().matches(pro.getPName())) {
-                            this.Processes.get(i).setTerminationTime(counter);
-                            this.Processes.get(i)
-                                    .setTurnaroundTime(
-                                            counter - this.Processes.get(i).getArrivalTime());
-                            this.Processes.get(i)
-                                    .setWaitingTime(this.Processes.get(i).getTurnaroundTime()
-                                            - this.Processes.get(i).getBurstTime());
+                    for (Process process : this.Processes) {
+                        if (process.getPName().matches(pro.getPName())) {
+                            process.setTerminationTime(counter);
+                            process.setTurnaroundTime(counter - process.getArrivalTime());
+                            process.setWaitingTime(
+                                    process.getTurnaroundTime() - process.getBurstTime());
                             for (int j = 0; j < readyP.size(); j++) {
                                 if (readyP.get(j).getPName().matches(pro.getPName())) {
                                     readyP.remove(j);
@@ -104,16 +96,16 @@ public class PriorityPreemptive {
 
     public double getAverageWaiting() {
         double sum = 0;
-        for (int i = 0; i < this.Processes.size(); i++) {
-            sum += this.Processes.get(i).getWaitingTime();
+        for (Process process : this.Processes) {
+            sum += process.getWaitingTime();
         }
         return sum / this.Processes.size();
     }
 
     public double getAverageTurnaround() {
         double sum = 0;
-        for (int i = 0; i < this.Processes.size(); i++) {
-            sum += this.Processes.get(i).getTurnaroundTime();
+        for (Process process : this.Processes) {
+            sum += process.getTurnaroundTime();
         }
         return sum / this.Processes.size();
     }

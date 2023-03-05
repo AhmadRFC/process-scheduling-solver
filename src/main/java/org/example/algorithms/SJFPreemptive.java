@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.example.Process;
+
 public class SJFPreemptive {
-    private LinkedList<Process> processes;
-    private ArrayList<GanttChartSection> ganttChartData;
+    private final LinkedList<Process> processes;
+    private final ArrayList<GanttChartSection> ganttChartData;
 
     public SJFPreemptive(LinkedList<Process> processes) {
         this.processes = processes;
@@ -21,8 +22,8 @@ public class SJFPreemptive {
         GanttChartSection last = null;
 
         LinkedList<Process> readyP = new LinkedList<>();
-        for (int i = 0; i < this.processes.size(); i++) {
-            readyP.add(new Process(this.processes.get(i)));
+        for (Process process : this.processes) {
+            readyP.add(new Process(process));
         }
         while (!readyP.isEmpty()) {
 
@@ -30,30 +31,25 @@ public class SJFPreemptive {
                 pro = readyP.get(0);
             }
 
-            for (int i = 0; i < readyP.size(); i++) {
-                if (readyP.get(i).getArrivalTime() <= counter) {
-                    pro = readyP.get(i);
+            for (Process process : readyP) {
+                if (process.getArrivalTime() <= counter) {
+                    pro = process;
                     break;
                 }
             }
-            for (int i = 0; i < readyP.size(); i++) {
-                if (readyP.get(i).getArrivalTime() <= counter) {
-                    if (readyP.get(i).getBurstTime() < pro.getBurstTime()) {
-                        pro = readyP.get(i);
-                    } else if (readyP.get(i).getBurstTime() == pro.getBurstTime()
-                            && readyP.get(i).getArrivalTime() < pro.getArrivalTime()) {
-                        pro = readyP.get(i);
+            for (Process process : readyP) {
+                if (process.getArrivalTime() <= counter) {
+                    if (pro != null && process.getBurstTime() < pro.getBurstTime()) {
+                        pro = process;
                     }
                 }
             }
 
             if (pro != null) {
                 if (!pro.isStarted()) {
-                    for (int i = 0; i < this.processes.size(); i++) {
-                        if (this.processes.get(i).getPName().matches(pro.getPName())) {
-                            this.processes.get(i)
-                                    .setResponseTime(
-                                            counter - this.processes.get(i).getArrivalTime());
+                    for (Process process : this.processes) {
+                        if (process.getPName().matches(pro.getPName())) {
+                            process.setResponseTime(counter - process.getArrivalTime());
                             pro.setStarted(true);
                         }
                     }
@@ -77,15 +73,12 @@ public class SJFPreemptive {
                 pro.setBurstTime(pro.getBurstTime() - 1);
                 counter++;
                 if (pro.getBurstTime() == 0) {
-                    for (int i = 0; i < this.processes.size(); i++) {
-                        if (this.processes.get(i).getPName().matches(pro.getPName())) {
-                            this.processes.get(i).setTerminationTime(counter);
-                            this.processes.get(i)
-                                    .setTurnaroundTime(
-                                            counter - this.processes.get(i).getArrivalTime());
-                            this.processes.get(i)
-                                    .setWaitingTime(this.processes.get(i).getTurnaroundTime()
-                                            - this.processes.get(i).getBurstTime());
+                    for (Process process : this.processes) {
+                        if (process.getPName().matches(pro.getPName())) {
+                            process.setTerminationTime(counter);
+                            process.setTurnaroundTime(counter - process.getArrivalTime());
+                            process.setWaitingTime(
+                                    process.getTurnaroundTime() - process.getBurstTime());
                             for (int j = 0; j < readyP.size(); j++) {
                                 if (readyP.get(j).getPName().matches(pro.getPName())) {
                                     readyP.remove(j);
@@ -104,16 +97,16 @@ public class SJFPreemptive {
 
     public double getAverageWaiting() {
         double sum = 0;
-        for (int i = 0; i < this.processes.size(); i++) {
-            sum += this.processes.get(i).getWaitingTime();
+        for (Process process : this.processes) {
+            sum += process.getWaitingTime();
         }
         return sum / this.processes.size();
     }
 
     public double getAverageTurnaround() {
         double sum = 0;
-        for (int i = 0; i < this.processes.size(); i++) {
-            sum += this.processes.get(i).getTurnaroundTime();
+        for (Process process : this.processes) {
+            sum += process.getTurnaroundTime();
         }
         return sum / this.processes.size();
     }

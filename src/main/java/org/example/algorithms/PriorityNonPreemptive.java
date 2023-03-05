@@ -7,8 +7,8 @@ import java.util.LinkedList;
 
 public class PriorityNonPreemptive {
 
-    private LinkedList<Process> Processes;
-    private ArrayList<GanttChartSection> ganttChartData;
+    private final LinkedList<Process> Processes;
+    private final ArrayList<GanttChartSection> ganttChartData;
 
     public PriorityNonPreemptive(LinkedList<Process> Processes) {
         this.Processes = Processes;
@@ -21,8 +21,8 @@ public class PriorityNonPreemptive {
         int counter = 0;
         Process pro = null;
         LinkedList<Process> readyP = new LinkedList<>();
-        for (int i = 0; i < this.Processes.size(); i++) {
-            readyP.add(new Process(this.Processes.get(i)));
+        for (Process element : this.Processes) {
+            readyP.add(new Process(element));
         }
         while (!readyP.isEmpty()) {
 
@@ -30,42 +30,37 @@ public class PriorityNonPreemptive {
                 pro = readyP.get(0);
             }
 
-            for (int i = 0; i < readyP.size(); i++) {
-                if (readyP.get(i).getArrivalTime() <= counter) {
-                    pro = readyP.get(i);
+            for (Process item : readyP) {
+                if (item.getArrivalTime() <= counter) {
+                    pro = item;
                     break;
                 }
             }
 
 
-            for (int i = 0; i < readyP.size(); i++) {
-                if (readyP.get(i).getArrivalTime() <= counter) {
-                    if (readyP.get(i).getPriority() < pro.getPriority()) {
-                        pro = readyP.get(i);
-                    } else if (readyP.get(i).getPriority() == pro.getPriority()
-                            && readyP.get(i).getArrivalTime() < pro.getArrivalTime()) {
-                        pro = readyP.get(i);
+            for (Process value : readyP) {
+                if (value.getArrivalTime() <= counter) {
+                    if (pro != null && value.getPriority() < pro.getPriority()) {
+                        pro = value;
                     }
                 }
             }
             if (pro != null) {
-                for (int i = 0; i < this.Processes.size(); i++) {
-                    if (this.Processes.get(i).getPName().matches(pro.getPName())) {
+                for (Process process : this.Processes) {
+                    if (process.getPName().matches(pro.getPName())) {
                         //gantt chart implementation
                         GanttChartSection temp =
-                                new GanttChartSection(counter, counter + pro.getBurstTime(), pro.getPName());
+                                new GanttChartSection(counter, counter + pro.getBurstTime(),
+                                        pro.getPName());
                         ganttChartData.add(temp);
 
-                        this.Processes.get(i)
-                                .setResponseTime(counter - this.Processes.get(i).getArrivalTime());
-                        counter += this.Processes.get(i).getBurstTime();
-                        this.Processes.get(i).setTerminationTime(counter);
-                        this.Processes.get(i)
-                                .setTurnaroundTime(this.Processes.get(i).getTerminationTime()
-                                        - this.Processes.get(i).getArrivalTime());
-                        this.Processes.get(i)
-                                .setWaitingTime(this.Processes.get(i).getTurnaroundTime()
-                                        - this.Processes.get(i).getBurstTime());
+                        process.setResponseTime(counter - process.getArrivalTime());
+                        counter += process.getBurstTime();
+                        process.setTerminationTime(counter);
+                        process.setTurnaroundTime(
+                                process.getTerminationTime() - process.getArrivalTime());
+                        process.setWaitingTime(
+                                process.getTurnaroundTime() - process.getBurstTime());
                     }
                 }
                 for (int i = 0; i < readyP.size(); i++) {
@@ -82,16 +77,16 @@ public class PriorityNonPreemptive {
 
     public double getAverageWaiting() {
         double sum = 0;
-        for (int i = 0; i < this.Processes.size(); i++) {
-            sum += this.Processes.get(i).getWaitingTime();
+        for (Process process : this.Processes) {
+            sum += process.getWaitingTime();
         }
         return sum / this.Processes.size();
     }
 
     public double getAverageTurnaround() {
         double sum = 0;
-        for (int i = 0; i < this.Processes.size(); i++) {
-            sum += this.Processes.get(i).getTurnaroundTime();
+        for (Process process : this.Processes) {
+            sum += process.getTurnaroundTime();
         }
         return sum / this.Processes.size();
     }

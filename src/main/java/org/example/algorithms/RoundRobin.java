@@ -7,7 +7,7 @@ import org.example.Process;
 public class RoundRobin {
     private final List<Process> processes;
     private final Queue<Process> queue = new LinkedList<>();
-    private ArrayList<GanttChartSection> ganttChartData;
+    private final ArrayList<GanttChartSection> ganttChartData;
     int quantum;
 
     public RoundRobin(List<Process> processes, int quantum) {
@@ -54,8 +54,8 @@ public class RoundRobin {
         } while (flag);
 
         //initializing Waiting Time for each process
-        for (Process prozess : processes) {
-            prozess.setWaitingTime(prozess.getTurnaroundTime() - prozess.getCopyBurstTime());
+        for (Process process : processes) {
+            process.setWaitingTime(process.getTurnaroundTime() - process.getCopyBurstTime());
         }
     }
 
