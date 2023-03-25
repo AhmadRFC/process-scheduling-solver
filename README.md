@@ -16,11 +16,10 @@ This project is a scheduling processing solver that takes process details from a
 
 <img src="images/1.png" width="400">  |  <img src="images/2.png" width="400">
 <br>
-<img src="images/3.png" width="400">  |  -Selecting a file: <img src="images/4.png" width="400">
+<img src="images/3.png" width="400">  |  <img src="images/5.png" width="400">
 <br>
-<img src="images/5.png" width="400">  |  <img src="images/6.png" width="400">
+<img src="images/6.png" width="400">  |  <img src="images/7.png" width="400">
 <br>
-<img src="images/7.png" width="400">
 
 
 # Getting Started
