@@ -14,11 +14,12 @@ This project is a scheduling processing solver that takes process details from a
        - Priority (non-preemptive)
     Displays the Gantt chart of the generated schedule using a GUI built with Swing
 
-             |  
-:-------------------------:|:-------------------------:
 <img src="images/1.png" width="200">  |  <img src="images/2.png" width="200">
+<br>
 <img src="images/3.png" width="200">  |  <img src="images/4.png" width="200">
+<br>
 <img src="images/5.png" width="200">  |  <img src="images/6.png" width="200">
+<br>
 <img src="images/7.png" width="200">
 
 
