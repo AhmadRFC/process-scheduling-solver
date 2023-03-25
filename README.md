@@ -2,6 +2,8 @@
 
 This project is a scheduling processing solver that takes process details from a text file and performs various calculations to generate an optimal schedule. It also includes a GUI built with Swing that displays the Gantt chart of the generated schedule.
 
+This project was a collaborative effort between myself and my friends.
+
 # Features
 
     Calculates the start time, end time, and turnaround time for each process
@@ -33,7 +35,3 @@ Once you have the source code, you can open it in your preferred IDE (such as Ec
 # Usage
 
 To use this program, you need to provide a text file containing the details of the processes you want to schedule. While on selecting the file UI you will be given an example of how the text file should be formatted.
-
-# Contribution
-
-This project was a collaborative effort between myself and my friends.
